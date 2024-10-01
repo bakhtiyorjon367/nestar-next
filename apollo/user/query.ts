@@ -8,7 +8,7 @@ export const GET_AGENTS = gql`
 	query GetAgents($input: AgentsInquiry!) {
 		getAgents(input: $input) {
 			list {
-				_id
+			    _id
 				memberType
 				memberStatus
 				memberAuthType

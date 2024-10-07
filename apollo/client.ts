@@ -29,6 +29,7 @@ const tokenRefreshLink = new TokenRefreshLink({
 
 function createIsomorphicLink() {
 	if (typeof window !== 'undefined') {
+		
 		const authLink = new ApolloLink((operation, forward) => {
 			operation.setContext(({ headers = {} }) => ({
 				headers: {

@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { Box, Button, Checkbox, Stack, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutFull from '../../libs/components/layout/LayoutFull';
 import { NextPage } from 'next';
@@ -31,9 +31,10 @@ import 'swiper/css/pagination';
 import { GET_PROPERTIES, GET_PROPERTY } from '../../apollo/user/query';
 import { T } from '../../libs/types/common';
 import { Direction, Message } from '../../libs/enums/common.enum';
-import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
-import { LIKE_TARGET_PROPERTY } from '../../apollo/user/mutation';
+import { sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
+import { CREATE_COMMENT, LIKE_TARGET_PROPERTY } from '../../apollo/user/mutation';
 import { GET_COMMENTS } from '../../apollo/admin/query';
+import { Height } from '@mui/icons-material';
 
 SwiperCore.use([Autoplay, Navigation, Pagination]);
 
@@ -62,13 +63,14 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 
 	/** APOLLO REQUESTS **/
 	const [likeTargetProperty] = useMutation(LIKE_TARGET_PROPERTY);
+	const [createComment] = useMutation(CREATE_COMMENT);
 	const { 
 		loading:getPropertyLoading,
 		data:getPropertyData, 
 		error:getPropertyError, 
 		refetch:getPropertyRefetch
 	} = useQuery(GET_PROPERTY, {
-		fetchPolicy:"cache-and-network",
+		fetchPolicy:"network-only",
 		variables:{ input: propertyId},
 		skip:!propertyId,
 		notifyOnNetworkStatusChange:true,
@@ -181,6 +183,27 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 		setCommentInquiry({ ...commentInquiry });
 	};
 
+	const createCommentHandler = async () => {
+		try{
+			if(!user._id) throw new Error(Message.NOT_AUTHENTICATED);
+			await  createComment({variables:{input:insertCommentData}});
+
+			setInsertCommentData({...insertCommentData, commentContent: ''});
+
+			await getCommentsRefetch({input:commentInquiry});
+		}catch(err:any){
+			await sweetErrorHandling(err);
+		}
+	}
+
+	if(getPropertyLoading){
+		return (
+			<Stack sx={{display:'flex', justifyContent:'center', alignItems:'center', width:'100%', height:'1080px'}}>
+				<CircularProgress size={'4rem'}/>
+			</Stack>
+		);
+	}
+
 	if (device === 'mobile') {
 		return <div>PROPERTY DETAIL PAGE</div>;
 	} else {
@@ -275,7 +298,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 							<Stack className={'images'}>
 								<Stack className={'main-image'}>
 									<img
-										src={slideImage ? `${REACT_APP_API_URL}/${slideImage}` : '/img/property/bigImage.png'}
+										src={slideImage ? `${REACT_APP_API_URL}/${slideImage}` : ''} ///img/property/bigImage.png
 										alt={'main-image'}
 									/>
 								</Stack>
@@ -493,6 +516,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 										<Button
 											className={'submit-review'}
 											disabled={insertCommentData.commentContent === '' || user?._id === ''}
+											onClick={createCommentHandler}
 										>
 											<Typography className={'title'}>Submit Review</Typography>
 											<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">

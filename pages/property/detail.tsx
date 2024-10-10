@@ -26,15 +26,14 @@ import Link from 'next/link';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useMutation, useQuery } from '@apollo/client';
-import 'swiper/css';
-import 'swiper/css/pagination';
 import { GET_PROPERTIES, GET_PROPERTY } from '../../apollo/user/query';
 import { T } from '../../libs/types/common';
 import { Direction, Message } from '../../libs/enums/common.enum';
 import { sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
 import { CREATE_COMMENT, LIKE_TARGET_PROPERTY } from '../../apollo/user/mutation';
 import { GET_COMMENTS } from '../../apollo/admin/query';
-import { Height } from '@mui/icons-material';
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 SwiperCore.use([Autoplay, Navigation, Pagination]);
 

@@ -26,7 +26,7 @@ import { CommentGroup, CommentStatus } from '../../libs/enums/comment.enum';
 import { Messages } from '../../libs/config';
 import { CommentUpdate } from '../../libs/types/comment/comment.update';
 import { sweetConfirmAlert, sweetMixinErrorAlert, sweetMixinSuccessAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
-import { error } from 'console';
+
 
 
 

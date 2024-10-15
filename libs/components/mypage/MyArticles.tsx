@@ -58,7 +58,7 @@ const MyArticles: NextPage = ({ initialInput, ...props }: T) => {
 			console.error('ERROR: likeBoardArticleHandler',err.message);
 			await sweetMixinErrorAlert(err.message).then()
 		}
-	}
+	};
 
 	if (device === 'mobile') {
 		return <>ARTICLE PAGE MOBILE</>;

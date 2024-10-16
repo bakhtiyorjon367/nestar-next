@@ -60,7 +60,16 @@ const MemberMenu = (props: MemberMenuProps) => {
 					</Stack>
 				</Stack>
 				<Stack className="follow-button-box">
-					{member?.meFollowed && member?.meFollowed[0]?.myFollowing ? (
+					{member?.meFollowed && member?.meFollowed?.[0]?.myFollowing ? (
+						<Button
+						variant="contained"
+						sx={{ background: '#ff5d18', ':hover': { background: '#ff5d18' } }}
+						onClick={() => subscribeHandler(member?._id, getMemberRefetch, memberId)}
+						
+					>
+						Follow
+					</Button>
+					) : (
 						<>
 							<Button
 								variant="outlined"
@@ -71,15 +80,7 @@ const MemberMenu = (props: MemberMenuProps) => {
 							</Button>
 							<Typography>Following</Typography>
 						</>
-					) : (
-						<Button
-							variant="contained"
-							sx={{ background: '#ff5d18', ':hover': { background: '#ff5d18' } }}
-							onClick={() => subscribeHandler(member?._id, getMemberRefetch, memberId)}
-							
-						>
-							Follow
-						</Button>
+						
 					)}
 				</Stack>
 				<Stack className={'sections'}>
